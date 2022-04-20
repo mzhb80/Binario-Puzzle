@@ -117,7 +117,8 @@ def recursive_backtrack(state: State):
         return
     
     # get next unassigned variable
-    cell = select_unassigned_variable(state)
+    # cell = select_unassigned_variable(state)
+    cell = mrv(state)
     
     for value in cell.domain:
         cell.value = value
@@ -132,3 +133,15 @@ def select_unassigned_variable(state: State) -> Cell:
             if j.value == '_':
                 return j
     return None
+
+def mrv(state: State) -> Cell:
+    min = 1000000
+    selectedCell = None
+    
+    for aRow in state.board:
+        for aCell in aRow:
+            if aCell.value == '_' and len(aCell.domain) < min:
+                selectedCell = aCell
+                min = len(aCell.domain)            
+            
+    return selectedCell
