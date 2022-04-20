@@ -148,18 +148,21 @@ def mrv(state: State) -> Cell:
     return selectedCell
 
 def forward_checking(state: State, i: int, j: int) -> bool:
+    randomNumber = random.randint(1, 3)
     
-    for index in range(i, state.size):
-        for jIndex in range(j, state.size):
-            if state.board[index][jIndex] == '_':
-                for value in state.board[index][jIndex].domain:
-                    state.board[index][jIndex].value = value
-                    if not is_consistent(state):
-                        state.board[index][jIndex].domain.remove(value)
-                    if len(state.board[index][jIndex].domain) == 0:
-                        return False
-                    elif len(state.board[index][jIndex].domain) == 1:
-                        state.board[index][jIndex].value = state.board[index][jIndex].domain[0]
-                    else:
-                        state.board[index][jIndex].value = '_'
-    return True
+    if randomNumber % 3 == 0:
+        for index in range(i, state.size):
+            for jIndex in range(j, state.size):
+                if state.board[index][jIndex] == '_':
+                    for value in state.board[index][jIndex].domain:
+                        state.board[index][jIndex].value = value
+                        if not is_consistent(state):
+                            state.board[index][jIndex].domain.remove(value)
+                        if len(state.board[index][jIndex].domain) == 0:
+                            return False
+                        elif len(state.board[index][jIndex].domain) == 1:
+                            state.board[index][jIndex].value = state.board[index][jIndex].domain[0]
+                        else:
+                            state.board[index][jIndex].value = '_'
+        return True
+    else: return True
