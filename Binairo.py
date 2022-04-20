@@ -124,7 +124,8 @@ def recursive_backtrack(state: State):
         cell.value = value
         if is_consistent(state):
             newState = deepcopy(state)
-            recursive_backtrack(newState)
+            if forward_checking(newState, cell.x, cell.y):
+                recursive_backtrack(newState)
     
     
 def select_unassigned_variable(state: State) -> Cell:
@@ -145,3 +146,20 @@ def mrv(state: State) -> Cell:
                 min = len(aCell.domain)            
             
     return selectedCell
+
+def forward_checking(state: State, i: int, j: int) -> bool:
+    
+    for index in range(i, state.size):
+        for jIndex in range(j, state.size):
+            if state.board[index][jIndex] == '_':
+                for value in state.board[index][jIndex].domain:
+                    state.board[index][jIndex].value = value
+                    if not is_consistent(state):
+                        state.board[index][jIndex].domain.remove(value)
+                    if len(state.board[index][jIndex].domain) == 0:
+                        return False
+                    elif len(state.board[index][jIndex].domain) == 1:
+                        state.board[index][jIndex].value = state.board[index][jIndex].domain[0]
+                    else:
+                        state.board[index][jIndex].value = '_'
+    return True
